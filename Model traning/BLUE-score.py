@@ -38,8 +38,8 @@ class CFG:
     train_csv_path = os.path.join(base_data_path, 'train.csv')
     dev_csv_path = os.path.join(base_data_path, 'dev.csv')
 
-    medical_train_ids_path = '/content/drive/MyDrive/medCSLR/data/ishara_med/final_train.csv'
-    medical_dev_ids_path = '/content/drive/MyDrive/medCSLR/data/ishara_med/final_dev.csv'
+    medical_train_ids_path = '/content/drive/MyDrive/medCSLR/data/ishara_med/train.csv'
+    medical_dev_ids_path = '/content/drive/MyDrive/medCSLR/data/ishara_med/dev.csv'
 
     work_dir = "/content/drive/MyDrive/CSLR_Experiments/Medical_Translation_Finetune"
 
@@ -108,8 +108,8 @@ class TranslationDataset(Dataset):
         )
 
         # The tokenizer output now includes 'labels'. We just need to process them.
-        model_inputs['labels'][model_inputs['labels'] == self.tokenizer.pad_token_id] = -100
-        
+        model_inputs['labels'][model_inputs['labels'] == self.tokenizer.pad_token_id] = -100 # Corrected pad_token_id access
+
         # Squeeze the tensors to remove the batch dimension (which is 1)
         model_inputs = {k: v.squeeze(0) for k, v in model_inputs.items()}
         return model_inputs
@@ -172,7 +172,7 @@ def main_finetune_translation():
 
         medical_train_ids_path = '/content/drive/MyDrive/medCSLR/data/ishara_med/train.csv'
         medical_dev_ids_path = '/content/drive/MyDrive/medCSLR/data/ishara_med/dev.csv'
-        
+
         medical_train_df = pd.read_csv(medical_train_ids_path)
         medical_dev_df = pd.read_csv(medical_dev_ids_path)
 
